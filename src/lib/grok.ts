@@ -55,15 +55,22 @@ export async function processUserMessageWithGrok(
   history: ChatMessage[],
   currentTransactions: Transaction[]
 ): Promise<GrokAnalysisResult> {
-  const apiKey = process.env.XAI_API_KEY?.trim();
-  const configuredModel = process.env.GROK_MODEL?.trim() || 'grok-4.7';
+  // Support both Groq (groq.com gsk_...) and xAI Grok (x.ai xai-...) keys
+  const apiKey = (process.env.GROQ_API_KEY || process.env.XAI_API_KEY)?.trim();
+  const isGroq = apiKey?.startsWith('gsk_') || process.env.AI_PROVIDER === 'groq';
 
-  // If live xAI key is provided, attempt live Grok API call
-  if (apiKey && apiKey !== 'your_xai_grok_api_key_here' && apiKey.length > 10) {
+  const defaultBaseUrl = isGroq ? 'https://api.groq.com/openai/v1' : 'https://api.x.ai/v1';
+  const baseURL = process.env.AI_BASE_URL?.trim() || defaultBaseUrl;
+
+  const defaultModel = isGroq ? 'llama-3.3-70b-versatile' : 'grok-4.7';
+  const configuredModel = process.env.GROK_MODEL?.trim() || defaultModel;
+
+  // If live key is provided, attempt live API call
+  if (apiKey && apiKey !== 'your_xai_grok_api_key_here' && apiKey !== 'your_groq_api_key_here' && apiKey.length > 10) {
     try {
       const client = new OpenAI({
         apiKey,
-        baseURL: 'https://api.x.ai/v1',
+        baseURL,
       });
 
       const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
@@ -79,8 +86,11 @@ User query: "${userText}"`,
         },
       ];
 
-      // Try configured model, with fallbacks
-      const modelsToTry = [configuredModel, 'grok-4-fast', 'grok-3-mini'];
+      // Try configured model, with provider-specific fallbacks
+      const modelsToTry = isGroq
+        ? [configuredModel, 'llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768']
+        : [configuredModel, 'grok-4.7', 'grok-4-fast', 'grok-3-mini'];
+
       let completion: any = null;
       let usedModel = configuredModel;
 
@@ -95,7 +105,7 @@ User query: "${userText}"`,
           usedModel = m;
           break;
         } catch (e: any) {
-          console.warn(`Grok model ${m} failed, trying fallback:`, e.message);
+          console.warn(`Model ${m} on ${baseURL} failed, trying fallback:`, e.message);
         }
       }
 
