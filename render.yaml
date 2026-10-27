@@ -1,5 +1,5 @@
 services:
-  # 1. Main Next.js Full-Stack Web Application
+  # 1. Main Next.js Full-Stack Web Application (Free Tier)
   - type: web
     name: paypulse-ai
     env: node
@@ -14,6 +14,8 @@ services:
         value: SANDBOX
       - key: GROK_MODEL
         value: grok-4.7
+      - key: GROQ_API_KEY
+        sync: false
       - key: XAI_API_KEY
         sync: false
       - key: PAYPAL_CLIENT_ID
@@ -25,17 +27,3 @@ services:
       - key: ZAPIER_WEBHOOK_URL
         sync: false
 
-  # 2. Render Workflow & Background Worker (Orchestration Engine)
-  # Coordinates distributed AI agent tasks, overdue invoice payment recovery & Zapier triggers
-  - type: worker
-    name: paypulse-agent-workflow-worker
-    env: node
-    plan: free
-    region: oregon
-    buildCommand: npm install
-    startCommand: node -e "console.log('Render Workflow Worker active: Monitoring PayPal Sandbox store events & agent queues.'); setInterval(() => {}, 60000);"
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PAYPAL_ENVIRONMENT
-        value: SANDBOX
