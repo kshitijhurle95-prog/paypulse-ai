@@ -8,7 +8,7 @@ import ApiInspectorDrawer from '@/components/ApiInspectorDrawer';
 
 export default function Home() {
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-app-bg">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#090D16] transition-colors duration-200">
       {/* Top Navigation Bar */}
       <Header />
 

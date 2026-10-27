@@ -343,3 +343,109 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
     paypalUrl: 'https://www.sandbox.paypal.com/invoice/p/#INV2-9842-1010'
   }
 ];
+
+const CUSTOMER_POOL = [
+  { name: 'Sarah Miller', email: 'sarah.miller@example.com' },
+  { name: 'David Kim', email: 'david.kim@techstart.io' },
+  { name: 'Elena Vance', email: 'elena.vance@studioart.com' },
+  { name: 'Sam Wilson', email: 'sam.wilson@falconair.com' },
+  { name: 'Marcus Thorne', email: 'marcus.t@apexlogistics.com' },
+  { name: 'Chloe Bennett', email: 'chloe.b@creativeagency.org' },
+  { name: 'Oliver Queen', email: 'oliver.queen@arrowcap.com' },
+  { name: 'Jessica Jones', email: 'jessica@aliasinvestigations.net' },
+  { name: 'Priya Sharma', email: 'priya.sharma@innovate.co' },
+  { name: 'Rahul Mehta', email: 'rahul.mehta@fintechlab.com' },
+  { name: 'Aman Gupta', email: 'aman.gupta@soundwave.io' },
+  { name: 'Bruce Wayne', email: 'bruce@wayneenterprises.com' },
+  { name: 'Diana Prince', email: 'diana.prince@themiscira.org' },
+  { name: 'Barry Allen', email: 'barry.allen@centralcitylabs.gov' },
+  { name: 'Clark Kent', email: 'clark.kent@dailyplanet.com' },
+  { name: 'Natasha Romanoff', email: 'natasha@redroomstudios.com' },
+  { name: 'Peter Parker', email: 'peter.parker@dailybugle.net' },
+  { name: 'Wanda Maximoff', email: 'wanda@westviewarts.org' },
+  { name: 'Tony Stark', email: 'tony@starkindustries.com' },
+  { name: 'Stephen Strange', email: 'stephen@sanctumbakery.org' },
+  { name: 'Carol Danvers', email: 'carol.danvers@avengerspace.org' },
+  { name: 'Arthur Curry', email: 'arthur.curry@atlantisevents.com' },
+  { name: 'Maya Lin', email: 'maya.lin@architectstudio.com' },
+  { name: 'Lucas Scott', email: 'lucas.scott@treepresents.com' },
+  { name: 'Zoe Kravitz', email: 'zoe@highfidelity.net' }
+];
+
+const BAKERY_ITEMS = [
+  { desc: '3 Boxes of Artisan Vanilla & Berry Cupcakes (12pk each)', price: 75.00, type: 'INVOICE' },
+  { desc: 'Executive Breakfast Pastry Platter (Croissants, Danishes, Brioche)', price: 110.00, type: 'INVOICE' },
+  { desc: 'Custom Hand-Painted Macaron Tower (60 pcs)', price: 95.00, type: 'INVOICE' },
+  { desc: 'SweetCrumb Handcrafted Ceramic Coffee Mug & Cinnamon Roll Bundle', price: 35.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Artisan Sourdough Loaf 4-Week Bread Subscription', price: 55.00, type: 'DIRECT_PAYMENT' },
+  { desc: '3-Tier Floral Buttercream Wedding Cake Deposit', price: 65.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Gluten-Free Raspberry Cheesecake (9 inch)', price: 45.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Dark Roast Cold Brew Jug & Double Espresso Beans (1kg)', price: 20.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Custom Red Velvet 2-Tier Birthday Cake with Gold Foil', price: 145.00, type: 'INVOICE' },
+  { desc: 'Weekly Fresh Croissant & Danish Box (Office Delivery)', price: 40.00, type: 'INVOICE' },
+  { desc: 'Artisan Sourdough Loaves & Herb Focaccia Catering Pack', price: 40.00, type: 'INVOICE' },
+  { desc: 'Matcha & White Chocolate Scones Box (16 pcs)', price: 48.00, type: 'INVOICE' },
+  { desc: 'Belgian Chocolate Ganache Brownie Platter (24 squares)', price: 60.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Rustic Apple Cinnamon Galette & Pecan Tart Bundle', price: 50.00, type: 'INVOICE' },
+  { desc: 'Cold Pressed Berry Lemonade & Pastry Bento Boxes (10pk)', price: 85.00, type: 'INVOICE' },
+  { desc: 'VIP Espresso Machine Bakery Bean Subscription (3 Months)', price: 180.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Earl Grey & Lavender Tea Cakes (Bulk Catering)', price: 72.00, type: 'INVOICE' },
+  { desc: 'Lemon Meringue Tart & Citrus Shortbread Gift Set', price: 38.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Sea Salt Caramel Cupcake Tower (48 count)', price: 120.00, type: 'INVOICE' },
+  { desc: 'Pain au Chocolat & Almond Croissant Weekend Box (12pk)', price: 52.00, type: 'INVOICE' },
+  { desc: 'Honey Fig & Goat Cheese Brioche Tartlets', price: 68.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'Pistachio Cardamom Babka Loaves (Set of 2)', price: 44.00, type: 'INVOICE' },
+  { desc: 'Strawberry Shortcake Mason Jar Desserts (20pk)', price: 90.00, type: 'INVOICE' },
+  { desc: 'Celebration Sourdough Focaccia with Edible Flower Art', price: 85.00, type: 'DIRECT_PAYMENT' },
+  { desc: 'French Butter Croissant Tower for Gala Brunch', price: 135.00, type: 'INVOICE' }
+];
+
+export function generateDynamicBakeryTransactions(): Transaction[] {
+  const result: Transaction[] = [];
+  const runId = Math.floor(1000 + Math.random() * 9000);
+  
+  // Create a randomized order of customers
+  const shuffledCustomers = [...CUSTOMER_POOL].sort(() => 0.5 - Math.random());
+  
+  // Define status distribution to match realistic bakery finances
+  const statuses: Array<'OVERDUE' | 'PAID' | 'REFUNDED' | 'SENT'> = [
+    'OVERDUE', 'OVERDUE', 'OVERDUE',
+    'PAID', 'PAID', 'PAID', 'PAID', 'PAID', 'PAID', 'PAID', 'PAID', 'PAID', 'PAID',
+    'REFUNDED', 'REFUNDED', 'REFUNDED', 'REFUNDED',
+    'SENT', 'SENT', 'SENT', 'SENT', 'SENT', 'SENT', 'SENT', 'SENT'
+  ].sort(() => 0.5 - Math.random()) as any;
+
+  for (let i = 0; i < 25; i++) {
+    const cust = shuffledCustomers[i % shuffledCustomers.length];
+    const item = BAKERY_ITEMS[i % BAKERY_ITEMS.length];
+    const status = statuses[i];
+    const isInvoice = item.type === 'INVOICE' || status === 'OVERDUE' || status === 'SENT';
+    const id = isInvoice ? `INV2-${runId}-${1001 + i}` : `TX-${runId}-${String(i + 1).padStart(3, '0')}`;
+    const day = 25 - Math.floor(i * 0.4);
+    const date = `2026-10-${String(Math.max(1, day)).padStart(2, '0')}`;
+    
+    // Vary amount slightly around base price
+    const variance = (Math.random() * 10 - 5);
+    const amount = Math.max(15, Math.round((item.price + variance) * 100) / 100);
+
+    result.push({
+      id,
+      date,
+      customerName: cust.name,
+      customerEmail: cust.email,
+      description: item.desc,
+      type: isInvoice ? 'INVOICE' : 'DIRECT_PAYMENT',
+      amount,
+      currency: 'USD',
+      status,
+      isOverdue: status === 'OVERDUE',
+      dueDate: status === 'OVERDUE' ? `2026-10-${String(Math.max(1, day - 10)).padStart(2, '0')}` : undefined,
+      paypalUrl: isInvoice 
+        ? `https://www.sandbox.paypal.com/invoice/p/#${id}`
+        : `https://www.sandbox.paypal.com/activity/payment/${id}`,
+      notes: status === 'OVERDUE' ? 'Late payment pending reminder' : undefined
+    });
+  }
+
+  return result;
+}

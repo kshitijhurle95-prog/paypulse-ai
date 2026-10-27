@@ -7,26 +7,36 @@
   --foreground: #0F172A;
 }
 
+.dark {
+  --background: #090D16;
+  --foreground: #F8FAFC;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Custom Scrollbar for crisp light fintech look */
+/* Custom Scrollbar for crisp fintech look */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
   border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -47,6 +57,16 @@ body {
   --ag-cell-horizontal-padding: 14px;
 }
 
+.dark .ag-theme-quartz {
+  --ag-background-color: #111827;
+  --ag-header-background-color: #0F172A;
+  --ag-header-foreground-color: #94A3B8;
+  --ag-foreground-color: #F8FAFC;
+  --ag-border-color: #1E293B;
+  --ag-row-hover-color: #1E293B;
+  --ag-selected-row-background-color: #1E3A5F;
+}
+
 .ag-theme-quartz .ag-header-cell-label {
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -54,4 +74,8 @@ body {
 
 .ag-theme-quartz .ag-row {
   border-bottom: 1px solid #F1F5F9;
+}
+
+.dark .ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #1E293B;
 }

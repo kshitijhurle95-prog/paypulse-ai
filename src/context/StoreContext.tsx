@@ -9,7 +9,7 @@ import {
   ApiLog,
   StoreMetrics,
 } from '@/types';
-import { INITIAL_TRANSACTIONS } from '@/lib/seed-data';
+import { INITIAL_TRANSACTIONS, generateDynamicBakeryTransactions } from '@/lib/seed-data';
 import confetti from 'canvas-confetti';
 
 interface StoreContextType {
@@ -21,10 +21,13 @@ interface StoreContextType {
   isInspectorOpen: boolean;
   isAiThinking: boolean;
   metrics: StoreMetrics;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
   sendMessage: (text: string) => Promise<void>;
   approveAction: (action: PendingPayPalAction) => Promise<void>;
   cancelAction: (actionId: string) => void;
   clearFilter: () => void;
+  clearChat: () => void;
   resetToJudgeDemoData: () => void;
   toggleInspector: () => void;
   setIsInspectorOpen: (open: boolean) => void;
@@ -38,6 +41,39 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [highlightedIds, setHighlightedIds] = useState<string[]>([]);
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(false);
   const [isAiThinking, setIsAiThinking] = useState<boolean>(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('paypulse_theme') as 'light' | 'dark';
+      if (savedTheme) {
+        setTheme(savedTheme);
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const next = prev === 'light' ? 'dark' : 'light';
+      try {
+        localStorage.setItem('paypulse_theme', next);
+      } catch (e) {}
+      if (next === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return next;
+    });
+  };
   const [apiLogs, setApiLogs] = useState<ApiLog[]>([
     {
       id: 'init_log_1',
@@ -101,6 +137,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     });
 
     const refundRate = transactions.length > 0 ? (refundCount / transactions.length) * 100 : 0;
+    const uniqueCust = new Set(transactions.map((t) => t.customerEmail || t.customerName));
+    const totalCustomers = uniqueCust.size > 0 ? uniqueCust.size : 24;
 
     return {
       totalRevenue,
@@ -110,6 +148,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       totalRefunded,
       refundCount,
       refundRate,
+      totalCustomers,
     };
   }, [transactions]);
 
@@ -289,15 +328,34 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setHighlightedIds([]);
   };
 
+  const clearChat = () => {
+    setChatMessages([
+      {
+        id: `welcome_${Date.now()}`,
+        sender: 'grok',
+        timestamp: 'Just now',
+        text: "👋 Hi! I'm your PayPulse AI copilot. Talk to your money naturally: ask me to show unpaid bills, create instant PayPal invoices, chase late payers with discounts, or explain why profits dropped this week!",
+      },
+    ]);
+  };
+
   const resetToJudgeDemoData = () => {
-    setTransactions(INITIAL_TRANSACTIONS);
+    const freshData = generateDynamicBakeryTransactions();
+    setTransactions(freshData);
     setActiveFilter(null);
     setHighlightedIds([]);
-    setChatMessages([
+    
+    let freshRevenue = 0;
+    freshData.forEach((t) => {
+      if (t.status === 'PAID') freshRevenue += t.amount;
+    });
+
+    setChatMessages((prev) => [
+      ...prev,
       {
         id: `reset_${Date.now()}`,
         sender: 'system',
-        text: '🔄 SweetCrumb Artisan Bakery store data reset to 25 pristine transactions and invoices for Judge Demo Mode.',
+        text: `🔄 Generated & loaded fresh SweetCrumb Bakery store dataset with 25 new transactions! (Confirmed Revenue: $${freshRevenue.toFixed(2)})`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       },
     ]);
@@ -316,10 +374,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         isInspectorOpen,
         isAiThinking,
         metrics,
+        theme,
+        toggleTheme,
         sendMessage,
         approveAction,
         cancelAction,
         clearFilter,
+        clearChat,
         resetToJudgeDemoData,
         toggleInspector,
         setIsInspectorOpen,

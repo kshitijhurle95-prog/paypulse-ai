@@ -69,7 +69,7 @@ export default function ApiInspectorDrawer() {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 bg-white border-t-2 border-slate-300 shadow-2xl transition-all duration-300 flex flex-col max-h-[500px] h-[450px]">
+    <div className="fixed inset-x-0 bottom-0 z-50 bg-white dark:bg-slate-900 border-t-2 border-slate-300 dark:border-slate-700 shadow-2xl transition-all duration-300 flex flex-col max-h-[500px] h-[450px]">
       {/* Header */}
       <div className="p-3 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
         <div className="flex items-center space-x-3">

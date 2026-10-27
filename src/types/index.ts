@@ -97,4 +97,5 @@ export interface StoreMetrics {
   totalRefunded: number;
   refundCount: number;
   refundRate: number;
+  totalCustomers: number;
 }
