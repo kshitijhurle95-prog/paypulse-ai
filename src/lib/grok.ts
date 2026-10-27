@@ -62,7 +62,7 @@ export async function processUserMessageWithGrok(
   const defaultBaseUrl = isGroq ? 'https://api.groq.com/openai/v1' : 'https://api.x.ai/v1';
   const baseURL = process.env.AI_BASE_URL?.trim() || defaultBaseUrl;
 
-  const defaultModel = isGroq ? 'llama-3.3-70b-versatile' : 'grok-4.7';
+  const defaultModel = isGroq ? 'openai/gpt-oss-120b' : 'grok-4.7';
   const configuredModel = process.env.GROK_MODEL?.trim() || defaultModel;
 
   // If live key is provided, attempt live API call
@@ -88,7 +88,7 @@ User query: "${userText}"`,
 
       // Try configured model, with provider-specific fallbacks
       const modelsToTry = isGroq
-        ? [configuredModel, 'llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768']
+        ? [configuredModel, 'openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b']
         : [configuredModel, 'grok-4.7', 'grok-4-fast', 'grok-3-mini'];
 
       let completion: any = null;
