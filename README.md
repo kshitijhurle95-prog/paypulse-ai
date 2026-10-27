@@ -12,10 +12,10 @@
 [![PayPal](https://img.shields.io/badge/PayPal-Sandbox%20v2%20REST-00457C?logo=paypal)](https://developer.paypal.com)
 [![AI LLM](https://img.shields.io/badge/AI%20Engine-Groq%20%7C%20xAI%20Grok-FF6F00?logo=fastapi)](https://groq.com)
 [![AG Grid](https://img.shields.io/badge/AG%20Grid-Enterprise%20Quartz-E0234E?logo=aggrid)](https://www.ag-grid.com)
-[![Render](https://img.shields.io/badge/Deploy-Render.yaml-46E3B7?logo=render)](https://render.com)
+[![Render](https://img.shields.io/badge/Deploy-Live%20on%20Render-46E3B7?logo=render)](https://paypulse-ai-u8wk.onrender.com)
 [![Zapier](https://img.shields.io/badge/Automations-Zapier%20Webhooks-FF4A00?logo=zapier)](https://zapier.com)
 
-[🚀 Live Demo](#-quickstart--local-setup) • [✨ Key Features](#-key-features) • [📸 Visual Showcase](#-visual-showcase) • [🏗️ Architecture](#️-system-architecture--ascii-file-layout) • [⚡ Hackathon Sponsor Alignment](#-hackathon-sponsor-tool-stacking)
+[🚀 Live Demo](https://paypulse-ai-u8wk.onrender.com) • [✨ Key Features](#-key-features) • [📸 Visual Showcase](#-visual-showcase) • [🏗️ Architecture](#️-system-architecture--ascii-file-layout) • [⚡ Hackathon Sponsor Alignment](#-hackathon-sponsor-tool-stacking)
 
 </div>
 
