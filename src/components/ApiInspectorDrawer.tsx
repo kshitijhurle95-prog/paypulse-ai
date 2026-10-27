@@ -12,12 +12,12 @@ import {
   Bot,
   ChevronDown,
   ChevronUp,
-  Trash2,
+  Server,
 } from 'lucide-react';
 
 export default function ApiInspectorDrawer() {
   const { isInspectorOpen, setIsInspectorOpen, apiLogs } = useStore();
-  const [selectedFilter, setSelectedFilter] = useState<'ALL' | 'PayPal Sandbox' | 'xAI Grok' | 'Zapier Webhook'>('ALL');
+  const [selectedFilter, setSelectedFilter] = useState<string>('ALL');
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -51,10 +51,18 @@ export default function ApiInspectorDrawer() {
           </span>
         );
       case 'Zapier Webhook':
+      case 'Zapier MCP':
         return (
           <span className="inline-flex items-center gap-1 bg-orange-50 text-orange-700 border border-orange-200 px-2 py-0.5 rounded text-[11px] font-semibold">
             <Zap className="w-3 h-3" />
-            <span>Zapier Webhook</span>
+            <span>Zapier MCP / Webhook</span>
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded text-[11px] font-semibold">
+            <Server className="w-3 h-3" />
+            <span>{service}</span>
           </span>
         );
     }
@@ -78,7 +86,7 @@ export default function ApiInspectorDrawer() {
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
-              Inspect real JSON requests & responses exchanged between xAI Grok, PayPal Sandbox REST APIs, and Zapier Webhooks.
+              Inspect real JSON requests & responses exchanged between xAI Grok, PayPal Sandbox REST APIs, AG Grid Enterprise, and Zapier MCP.
             </p>
           </div>
         </div>
@@ -86,7 +94,7 @@ export default function ApiInspectorDrawer() {
         <div className="flex items-center space-x-2">
           {/* Service Filter Tabs */}
           <div className="flex items-center bg-slate-800 p-0.5 rounded-lg border border-slate-700 text-xs">
-            {(['ALL', 'PayPal Sandbox', 'xAI Grok', 'Zapier Webhook'] as const).map((filter) => (
+            {['ALL', 'PayPal Sandbox', 'xAI Grok', 'Zapier Webhook'].map((filter) => (
               <button
                 key={filter}
                 onClick={() => setSelectedFilter(filter)}

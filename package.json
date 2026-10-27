@@ -12,6 +12,7 @@
   "dependencies": {
     "@paypal/agent-toolkit": "^1.11.0",
     "ag-grid-community": "^32.3.9",
+    "ag-grid-enterprise": "^32.3.9",
     "ag-grid-react": "^32.3.9",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",

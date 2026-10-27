@@ -1,14 +1,19 @@
 'use client';
 
-import React, { useMemo, useState, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useRef, useCallback, useEffect } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import {
   ColDef,
   ICellRendererParams,
   GridReadyEvent,
+  StatusPanelDef,
 } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+
+// AG Grid Enterprise & License Key Registration
+import 'ag-grid-enterprise';
+import { LicenseManager } from 'ag-grid-enterprise';
 
 import { useStore } from '@/context/StoreContext';
 import { Transaction, PaymentStatus } from '@/types';
@@ -23,7 +28,23 @@ import {
   Layers,
   Clock,
   RotateCcw,
+  SlidersHorizontal,
+  ShieldCheck,
+  CheckCircle2,
 } from 'lucide-react';
+
+const AG_GRID_LICENSE_KEY =
+  process.env.NEXT_PUBLIC_AG_GRID_LICENSE_KEY ||
+  '[TRIAL]_this_{AG_Studio_Pro}_Enterprise_key_{AG-149437}_is_granted_for_evaluation_only___Use_in_production_is_not_permitted___Please_report_misuse_to_legal@ag-grid.com___For_help_with_purchasing_a_production_key_please_contact_info@ag-grid.com___You_are_granted_a_{Single_Application}_Developer_License_for_one_application_only___All_Front-End_JavaScript_developers_working_on_the_application_would_need_to_be_licensed___This_key_will_deactivate_on_{11 December 2026}____[v3]_[03C]_MTc5Njk0NzIwMDAwMA==3a37e16692e0044c396c8bd28c098465';
+
+// Set AG Grid Enterprise license key to clear trial messages & unlock full enterprise features
+if (typeof window !== 'undefined') {
+  try {
+    LicenseManager.setLicenseKey(AG_GRID_LICENSE_KEY);
+  } catch (err) {
+    console.warn('LicenseManager registration notice:', err);
+  }
+}
 
 export default function FinancialWorkbench() {
   const {
@@ -37,6 +58,7 @@ export default function FinancialWorkbench() {
   const gridRef = useRef<AgGridReact<Transaction>>(null);
   const [quickSearch, setQuickSearch] = useState('');
   const [statusTab, setStatusTab] = useState<'ALL' | PaymentStatus>('ALL');
+  const [showToolPanel, setShowToolPanel] = useState(false);
 
   // Filter transactions based on AI filter, manual status tab, and search query
   const filteredData = useMemo(() => {
@@ -83,6 +105,19 @@ export default function FinancialWorkbench() {
       });
     }
   }, []);
+
+  // Toggle SideBar ToolPanel
+  const toggleToolPanel = useCallback(() => {
+    if (gridRef.current?.api) {
+      if (showToolPanel) {
+        gridRef.current.api.closeToolPanel();
+        setShowToolPanel(false);
+      } else {
+        gridRef.current.api.openToolPanel('columns');
+        setShowToolPanel(true);
+      }
+    }
+  }, [showToolPanel]);
 
   // AG Grid Custom Cell Renderers
   const StatusBadgeRenderer = (params: ICellRendererParams<Transaction>) => {
@@ -238,6 +273,7 @@ export default function FinancialWorkbench() {
         cellRenderer: IdRenderer,
         sortable: true,
         filter: true,
+        enableRowGroup: true,
       },
       {
         headerName: 'Date',
@@ -275,6 +311,7 @@ export default function FinancialWorkbench() {
         width: 125,
         cellRenderer: TypeRenderer,
         sortable: true,
+        enableRowGroup: true,
       },
       {
         headerName: 'Amount',
@@ -282,6 +319,7 @@ export default function FinancialWorkbench() {
         width: 110,
         cellRenderer: AmountRenderer,
         sortable: true,
+        aggFunc: 'sum',
         headerClass: 'ag-right-aligned-header',
       },
       {
@@ -291,6 +329,7 @@ export default function FinancialWorkbench() {
         cellRenderer: StatusBadgeRenderer,
         sortable: true,
         filter: true,
+        enableRowGroup: true,
       },
       {
         headerName: 'PayPal Link',
@@ -323,6 +362,18 @@ export default function FinancialWorkbench() {
     }),
     []
   );
+
+  // Enterprise Status Bar
+  const statusBar = useMemo(() => {
+    return {
+      statusPanels: [
+        { statusPanel: 'agTotalRowCountComponent', align: 'left' },
+        { statusPanel: 'agFilteredRowCountComponent', align: 'left' },
+        { statusPanel: 'agSelectedRowCountComponent', align: 'left' },
+        { statusPanel: 'agAggregationComponent', align: 'right' },
+      ],
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-slate-50 p-4 sm:p-6 overflow-y-auto">
@@ -393,12 +444,27 @@ export default function FinancialWorkbench() {
           </div>
         </div>
 
-        {/* Right: AG Grid prize badge, count & CSV Export */}
-        <div className="flex items-center space-x-3">
-          <div className="hidden md:flex items-center space-x-1.5 text-[11px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
-            <Layers className="w-3.5 h-3.5 text-paypal-blue" />
-            <span>AG Grid Live Table ({filteredData.length} records)</span>
+        {/* Right: AG Studio Enterprise badge, ToolPanel toggle & CSV Export */}
+        <div className="flex items-center space-x-2">
+          {/* Official AG Studio Enterprise License Badge */}
+          <div className="hidden lg:flex items-center space-x-1.5 text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>AG Studio Pro Enterprise</span>
           </div>
+
+          {/* ToolPanel Columns / Filters Toggle */}
+          <button
+            onClick={toggleToolPanel}
+            className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border shadow-sm transition-colors ${
+              showToolPanel
+                ? 'bg-slate-900 text-white border-slate-900'
+                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
+            }`}
+            title="Toggle AG Grid Columns & Filters Tool Panel"
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Tool Panel</span>
+          </button>
 
           <button
             onClick={handleExportCsv}
@@ -411,7 +477,7 @@ export default function FinancialWorkbench() {
         </div>
       </div>
 
-      {/* Centerpiece AG Grid Table (ag-theme-quartz) */}
+      {/* Centerpiece AG Grid Enterprise Table (ag-theme-quartz) */}
       <div className="flex-1 min-h-[460px] bg-white border-x border-b border-app-border rounded-b-xl shadow-sm overflow-hidden">
         <div className="ag-theme-quartz w-full h-full text-xs">
           <AgGridReact<Transaction>
@@ -426,6 +492,12 @@ export default function FinancialWorkbench() {
             paginationPageSizeSelector={[10, 15, 25, 50]}
             rowHeight={46}
             headerHeight={40}
+            enableRangeSelection={true}
+            statusBar={statusBar}
+            sideBar={{
+              toolPanels: ['columns', 'filters'],
+              defaultToolPanel: '',
+            }}
             suppressCellFocus={true}
           />
         </div>

@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   CreditCard,
   Store,
+  Zap,
 } from 'lucide-react';
 
 export default function Header() {
@@ -42,15 +43,25 @@ export default function Header() {
         </div>
 
         {/* Live Status Indicators */}
-        <div className="hidden lg:flex items-center space-x-3">
-          <div className="flex items-center space-x-2 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs px-3 py-1.5 rounded-full font-medium">
+        <div className="hidden lg:flex items-center space-x-2.5">
+          <div className="flex items-center space-x-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs px-2.5 py-1 rounded-full font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Grok AI Ready</span>
           </div>
 
-          <div className="flex items-center space-x-2 bg-sky-50 text-sky-800 border border-sky-200 text-xs px-3 py-1.5 rounded-full font-medium">
+          <div className="flex items-center space-x-1.5 bg-sky-50 text-sky-800 border border-sky-200 text-xs px-2.5 py-1 rounded-full font-medium">
             <ShieldCheck className="w-3.5 h-3.5 text-paypal-blue" />
             <span>PayPal Sandbox Active</span>
+          </div>
+
+          <div className="flex items-center space-x-1.5 bg-purple-50 text-purple-800 border border-purple-200 text-xs px-2.5 py-1 rounded-full font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
+            <span>AG Studio Enterprise</span>
+          </div>
+
+          <div className="flex items-center space-x-1.5 bg-amber-50 text-amber-800 border border-amber-200 text-xs px-2.5 py-1 rounded-full font-medium">
+            <Zap className="w-3 h-3 text-amber-600" />
+            <span>Zapier MCP Live</span>
           </div>
         </div>
 
