@@ -22,6 +22,11 @@ interface StoreContextType {
   isAiThinking: boolean;
   metrics: StoreMetrics;
   theme: 'light' | 'dark';
+  activeNavTab: 'dashboard' | 'invoices' | 'customers' | 'analytics' | 'ai';
+  setActiveNavTab: (tab: 'dashboard' | 'invoices' | 'customers' | 'analytics' | 'ai') => void;
+  isChatOpen: boolean;
+  setIsChatOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
+  toggleChat: () => void;
   toggleTheme: () => void;
   sendMessage: (text: string) => Promise<void>;
   approveAction: (action: PendingPayPalAction) => Promise<void>;
@@ -42,6 +47,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(false);
   const [isAiThinking, setIsAiThinking] = useState<boolean>(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [activeNavTab, setActiveNavTab] = useState<'dashboard' | 'invoices' | 'customers' | 'analytics' | 'ai'>('dashboard');
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(true);
+
+  const toggleChat = () => setIsChatOpen((prev) => !prev);
 
   // Initialize theme from localStorage
   useEffect(() => {
@@ -375,6 +384,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         isAiThinking,
         metrics,
         theme,
+        activeNavTab,
+        setActiveNavTab,
+        isChatOpen,
+        setIsChatOpen,
+        toggleChat,
         toggleTheme,
         sendMessage,
         approveAction,

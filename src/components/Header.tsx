@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useStore } from '@/context/StoreContext';
 import {
   Sparkles,
@@ -14,7 +14,7 @@ import {
   Bot,
   Sun,
   Moon,
-  Zap,
+  PanelLeftOpen,
 } from 'lucide-react';
 
 export default function Header() {
@@ -25,16 +25,26 @@ export default function Header() {
     apiLogs,
     theme,
     toggleTheme,
-    transactions,
+    activeNavTab,
+    setActiveNavTab,
+    isChatOpen,
+    setIsChatOpen,
+    toggleChat,
   } = useStore();
 
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'invoices' | 'customers' | 'analytics' | 'ai'>('dashboard');
+  const handleNavClick = (tab: 'dashboard' | 'invoices' | 'customers' | 'analytics' | 'ai') => {
+    if (tab === 'ai') {
+      setIsChatOpen((prev) => !prev);
+    } else {
+      setActiveNavTab(tab);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-30 bg-white dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
       <div className="max-w-[1850px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Left Side: Brand Logo + Subtitle + Main Navigation Tabs */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4 sm:space-x-6">
           {/* Logo & Subtitle */}
           <div className="flex items-center space-x-2.5">
             <div className="w-9 h-9 rounded-xl bg-blue-600 dark:bg-blue-500 flex items-center justify-center text-white shadow-sm shadow-blue-500/25">
@@ -50,13 +60,26 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Navigation Pill Tabs */}
-          <nav className="hidden md:flex items-center space-x-1 pl-3">
+          {/* Quick Toggle for Collapsed Copilot */}
+          {!isChatOpen && (
             <button
-              onClick={() => setActiveTab('dashboard')}
+              onClick={toggleChat}
+              title="Expand AI Copilot"
+              className="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 text-xs font-semibold hover:bg-blue-100 transition-all animate-in fade-in"
+            >
+              <PanelLeftOpen className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Open Copilot</span>
+            </button>
+          )}
+
+          {/* Navigation Pill Tabs - Now 100% Functional! */}
+          <nav className="hidden md:flex items-center space-x-1 pl-2">
+            {/* 1. Dashboard */}
+            <button
+              onClick={() => handleNavClick('dashboard')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${
-                activeTab === 'dashboard'
-                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300'
+                activeNavTab === 'dashboard'
+                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
@@ -64,11 +87,12 @@ export default function Header() {
               <span>Dashboard</span>
             </button>
 
+            {/* 2. Invoices */}
             <button
-              onClick={() => setActiveTab('invoices')}
+              onClick={() => handleNavClick('invoices')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${
-                activeTab === 'invoices'
-                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300'
+                activeNavTab === 'invoices'
+                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
@@ -76,11 +100,12 @@ export default function Header() {
               <span>Invoices</span>
             </button>
 
+            {/* 3. Customers */}
             <button
-              onClick={() => setActiveTab('customers')}
+              onClick={() => handleNavClick('customers')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${
-                activeTab === 'customers'
-                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300'
+                activeNavTab === 'customers'
+                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
@@ -88,11 +113,12 @@ export default function Header() {
               <span>Customers</span>
             </button>
 
+            {/* 4. Analytics */}
             <button
-              onClick={() => setActiveTab('analytics')}
+              onClick={() => handleNavClick('analytics')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${
-                activeTab === 'analytics'
-                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300'
+                activeNavTab === 'analytics'
+                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
@@ -100,22 +126,24 @@ export default function Header() {
               <span>Analytics</span>
             </button>
 
+            {/* 5. AI Assistant */}
             <button
-              onClick={() => setActiveTab('ai')}
+              onClick={() => handleNavClick('ai')}
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 ${
-                activeTab === 'ai'
-                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300'
+                isChatOpen
+                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               <Bot className="w-3.5 h-3.5 text-blue-500" />
               <span>AI Assistant</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${isChatOpen ? 'bg-blue-600' : 'bg-slate-300'}`} />
             </button>
           </nav>
         </div>
 
         {/* Right Side: Status Badges + Demo Reset + Theme Toggle + User Avatar */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           {/* Status Badges */}
           <div className="hidden xl:flex items-center space-x-2">
             <div className="flex items-center space-x-1.5 bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 text-xs px-2.5 py-1 rounded-full font-medium">

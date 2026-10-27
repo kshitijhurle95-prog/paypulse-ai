@@ -14,15 +14,12 @@ import {
   Percent,
   Search,
   Undo2,
-  Paperclip,
-  Globe,
-  Mic,
   Maximize2,
   FileText,
   Trash2,
   Clock,
   ArrowRight,
-  ChevronDown,
+  PanelLeftClose,
 } from 'lucide-react';
 
 const QUICK_PROMPTS = [
@@ -72,7 +69,7 @@ const ALTERNATE_PROMPTS = [
 ];
 
 export default function GrokAssistant() {
-  const { chatMessages, sendMessage, isAiThinking, clearChat } = useStore();
+  const { chatMessages, sendMessage, isAiThinking, clearChat, toggleChat } = useStore();
   const [inputText, setInputText] = useState('');
   const [showMoreExamples, setShowMoreExamples] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -103,7 +100,7 @@ export default function GrokAssistant() {
   return (
     <div className="flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-colors duration-200">
       {/* Copilot Header Card */}
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-900/80">
+      <div className="p-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-900/80">
         <div className="flex items-center space-x-3">
           {/* Avatar with blue glow headset/bot */}
           <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-700 via-indigo-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
@@ -124,28 +121,21 @@ export default function GrokAssistant() {
           </div>
         </div>
 
-        {/* Window action icons */}
+        {/* Window action icons + Collapse button */}
         <div className="flex items-center space-x-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-          <button
-            onClick={() => alert("PayPulse Copilot context is active and synced with SweetCrumb Bakery store records.")}
-            title="Copilot Details"
-            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
-          >
-            <FileText className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => alert("Copilot full workbench view is active.")}
-            title="Expand View"
-            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
-          >
-            <Maximize2 className="w-3.5 h-3.5" />
-          </button>
           <button
             onClick={clearChat}
             title="Clear conversation"
             className="p-1 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 rounded transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={toggleChat}
+            title="Collapse AI Copilot"
+            className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors text-slate-500 hover:text-slate-900 dark:hover:text-white"
+          >
+            <PanelLeftClose className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -319,9 +309,9 @@ export default function GrokAssistant() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Chat Input Container matching Image 2 */}
+      {/* Chat Input Container */}
       <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-        <form onSubmit={handleSubmit} className="space-y-2">
+        <form onSubmit={handleSubmit}>
           {/* Main Input Box with Blue Send Button */}
           <div className="relative flex items-center bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all p-1">
             <input
@@ -339,42 +329,6 @@ export default function GrokAssistant() {
             >
               <Send className="w-3.5 h-3.5" />
             </button>
-          </div>
-
-          {/* Bottom Bar: Action Icons + Model Badge */}
-          <div className="flex items-center justify-between px-1 text-slate-400 dark:text-slate-500">
-            <div className="flex items-center space-x-3">
-              <button
-                type="button"
-                onClick={() => alert("Attachment feature ready for receipts and bank statements.")}
-                title="Attach document or receipt"
-                className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-              >
-                <Paperclip className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => alert("Live PayPal Sandbox live sync enabled.")}
-                title="Online Sandbox sync"
-                className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-              >
-                <Globe className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => alert("Voice dictation ready: try asking 'Show overdue invoices'")}
-                title="Voice dictation"
-                className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-              >
-                <Mic className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Model Pill */}
-            <div className="flex items-center space-x-1 text-[11px] font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700">
-              <span>Grok + PayPal</span>
-              <ChevronDown className="w-3 h-3 text-slate-400" />
-            </div>
           </div>
         </form>
       </div>
