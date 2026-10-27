@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar for crisp light fintech look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* AG Grid Quartz Theme Tweaks */
+.ag-theme-quartz {
+  --ag-background-color: #FFFFFF;
+  --ag-header-background-color: #F8FAFC;
+  --ag-header-foreground-color: #475569;
+  --ag-foreground-color: #0F172A;
+  --ag-border-color: #E2E8F0;
+  --ag-row-hover-color: #F8FAFC;
+  --ag-selected-row-background-color: #EBF5FB;
+  --ag-font-size: 12px;
+  --ag-font-family: inherit;
+  --ag-cell-horizontal-padding: 14px;
+}
+
+.ag-theme-quartz .ag-header-cell-label {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #F1F5F9;
+}
