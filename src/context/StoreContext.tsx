@@ -8,8 +8,8 @@ import {
   PendingPayPalAction,
   ApiLog,
   StoreMetrics,
-} from '@/types';
-import { INITIAL_TRANSACTIONS, generateDynamicBakeryTransactions } from '@/lib/seed-data';
+} from '../types';
+import { INITIAL_TRANSACTIONS, generateDynamicBakeryTransactions } from '../lib/seed-data';
 import confetti from 'canvas-confetti';
 
 interface StoreContextType {

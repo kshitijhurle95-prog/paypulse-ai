@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useStore } from '@/context/StoreContext';
+import { useStore } from '../context/StoreContext';
 import {
   X,
   Terminal,

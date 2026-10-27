@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { StoreProvider } from '@/context/StoreContext';
+import { StoreProvider } from '../context/StoreContext';
 
 export const metadata: Metadata = {
   title: 'PayPulse AI — The "Talk-to-Your-Money" Business Helper',

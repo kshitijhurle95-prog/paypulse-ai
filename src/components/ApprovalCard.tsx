@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { PendingPayPalAction } from '@/types';
-import { useStore } from '@/context/StoreContext';
+import { PendingPayPalAction } from '../types';
+import { useStore } from '../context/StoreContext';
 import {
   CheckCircle2,
   XCircle,

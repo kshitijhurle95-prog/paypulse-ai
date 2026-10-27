@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { ChatMessage, GrokGridAction, PendingPayPalAction, Transaction } from '@/types';
+import { ChatMessage, GrokGridAction, PendingPayPalAction, Transaction } from '../types';
 
 export interface GrokAnalysisResult {
   reply: string;

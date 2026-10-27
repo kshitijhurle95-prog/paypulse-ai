@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useMemo, useState, useEffect } from 'react';
-import { useStore } from '@/context/StoreContext';
-import { Transaction, PaymentStatus } from '@/types';
+import { useStore } from '../context/StoreContext';
+import { Transaction, PaymentStatus } from '../types';
 import KpiCards from './KpiCards';
 import {
   Search,

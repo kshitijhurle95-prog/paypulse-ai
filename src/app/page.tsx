@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import Header from '@/components/Header';
-import GrokAssistant from '@/components/GrokAssistant';
-import FinancialWorkbench from '@/components/FinancialWorkbench';
-import ApiInspectorDrawer from '@/components/ApiInspectorDrawer';
-import { useStore } from '@/context/StoreContext';
+import Header from '../components/Header';
+import GrokAssistant from '../components/GrokAssistant';
+import FinancialWorkbench from '../components/FinancialWorkbench';
+import ApiInspectorDrawer from '../components/ApiInspectorDrawer';
+import { useStore } from '../context/StoreContext';
 import { Bot, PanelLeftOpen } from 'lucide-react';
 
 export default function Home() {

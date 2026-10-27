@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useStore } from '@/context/StoreContext';
+import { useStore } from '../context/StoreContext';
 import ApprovalCard from './ApprovalCard';
 import {
   Send,
